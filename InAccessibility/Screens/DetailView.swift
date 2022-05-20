@@ -41,6 +41,8 @@ struct DetailView: View {
                 Text(stock.name)
                     .font(.system(size: 24))
                     .bold()
+                Text(stock.shortName)
+                    .font(.system(size: 12))
             }
             
             Spacer()
