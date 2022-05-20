@@ -7,11 +7,19 @@
 
 import SwiftUI
 
+enum AlertItem: String, Identifiable {
+    case share
+    case favorite
+    
+    var id: String { self.rawValue }
+}
 struct DetailView: View {
     
     let stock: Stock
-    @State var showShareAlert = false
-    @State var showFavoriteAlert = false
+    @State var selectedAlertItem: AlertItem?
+    
+
+    
     
     var body: some View {
         NavigationView {
@@ -25,12 +33,13 @@ struct DetailView: View {
             Text("Detailview")
                 .navigationTitle(stock.name)
         }
-        .alert(isPresented: $showShareAlert) {
-            Alert(title: Text("Thanks for sharing!"))
-        }
-        .alert(isPresented: $showFavoriteAlert) {
-            Alert(title: Text("Thanks for favoriting (but not really)!"))
-        }
+        .alert(item: $selectedAlertItem, content: { item in
+            if item == .share {
+                return Alert(title: Text("Thanks for sharing!"))
+            } else {
+                return Alert(title: Text("Thanks for favoriting (but not really)!"))
+            }
+        })
     }
     
     var companyInfo: some View {
@@ -70,7 +79,7 @@ struct DetailView: View {
                 .cornerRadius(15)
                 .foregroundColor(.white)
                 .onTapGesture {
-                    showShareAlert = true
+                    selectedAlertItem = .share
                 }
             
             Text("Favorite")
@@ -82,7 +91,7 @@ struct DetailView: View {
                 .cornerRadius(15)
                 .foregroundColor(.white)
                 .onTapGesture {
-                    showFavoriteAlert = true
+                    selectedAlertItem = .favorite
                 }
         }
     }
